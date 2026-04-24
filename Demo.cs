@@ -1,4 +1,5 @@
 using Godot;
+using System;
 
 public partial class Demo : SubViewportContainer
 {
@@ -16,6 +17,7 @@ public partial class Demo : SubViewportContainer
 	private ColorPickerButton btCurrentColor = null!;
 	private FileDialog fileDialog = null!;
 	private Image? imgSave;
+	private bool sketchIsGd;
 
 	private string currentSketchPath = string.Empty;
 
@@ -51,6 +53,26 @@ public partial class Demo : SubViewportContainer
 		canvas.SetScript(Sketch);
 
 		canvas = GetNode<Node2D>("SketchViewport/Canvas");
+		sketchIsGd = Sketch.ResourcePath.EndsWith(".gd", StringComparison.OrdinalIgnoreCase);
+
+		if (sketchIsGd)
+		{
+			canvas.Connect("set_background_color", new Callable(this, nameof(SetBackgroundColor)));
+			canvas.Connect("set_viewport_size", new Callable(this, nameof(SetViewportSize)));
+			canvas.Connect("set_current_color", new Callable(this, nameof(SetCurrentColor)));
+			canvas.Set("sub_viewport", sketchViewport);
+
+			if (canvas.HasMethod("_init_from_main_scene"))
+			{
+				canvas.Call("_init_from_main_scene");
+			}
+			else
+			{
+				GD.PushError("GDScript sketch must be compatible with godotp5_class.gd and implement _init_from_main_scene().");
+			}
+			return;
+		}
+
 		if (canvas is not GodotP5 p5Canvas)
 		{
 			GD.PushError("Sketch script must inherit from GodotP5.");
@@ -94,36 +116,85 @@ public partial class Demo : SubViewportContainer
 		btMenu.Hide();
 	}
 
+	private void _on_bt_menu_pressed()
+	{
+		_OnBtMenuPressed();
+	}
+
 	private void _OnBtHidePressed()
 	{
 		panel.Hide();
 		btMenu.Show();
 	}
 
+	private void _on_bt_hide_pressed()
+	{
+		_OnBtHidePressed();
+	}
+
 	private void _OnBtPausePressed()
 	{
 		GD.Print("on Button pause pressed ..");
+		if (sketchIsGd)
+		{
+			if (canvas.HasMethod("pause"))
+			{
+				canvas.Call("pause");
+			}
+			return;
+		}
+
 		if (canvas is GodotP5 p5Canvas)
 		{
 			p5Canvas.Pause();
 		}
 	}
 
+	private void _on_bt_pause_pressed()
+	{
+		_OnBtPausePressed();
+	}
+
 	private void _OnBtRestartPressed()
 	{
 		sketchViewport.Set("size", Vector2I.Zero);
+		if (sketchIsGd)
+		{
+			if (canvas.HasMethod("restart"))
+			{
+				canvas.Call("restart");
+			}
+			return;
+		}
+
 		if (canvas is GodotP5 p5Canvas)
 		{
 			p5Canvas.Restart();
 		}
 	}
 
+	private void _on_bt_restart_pressed()
+	{
+		_OnBtRestartPressed();
+	}
+
 	private void _OnColorBtCurrentColorChanged(Color color)
 	{
+		if (sketchIsGd)
+		{
+			canvas.Set("_current_color", color);
+			return;
+		}
+
 		if (canvas is GodotP5 p5Canvas)
 		{
 			p5Canvas.CurrentColor = color;
 		}
+	}
+
+	private void _on_color_BtCurrentColor_changed(Color color)
+	{
+		_OnColorBtCurrentColorChanged(color);
 	}
 
 	private void _OnBtSaveImagePressed()
@@ -132,9 +203,19 @@ public partial class Demo : SubViewportContainer
 		fileDialog.Show();
 	}
 
+	private void _on_bt_save_image_pressed()
+	{
+		_OnBtSaveImagePressed();
+	}
+
 	private void _OnFileDialogFileSelected(string path)
 	{
 		imgSave?.SavePng(path);
+	}
+
+	private void _on_file_dialog_file_selected(string path)
+	{
+		_OnFileDialogFileSelected(path);
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
