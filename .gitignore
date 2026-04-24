@@ -1,0 +1,26 @@
+# Godot 4 cache/editor data
+.godot/
+
+# Godot import/cache (legacy + some plugins)
+.import/
+
+# Export settings (often machine-specific / may contain secrets)
+export.cfg
+export_presets.cfg
+
+# Godot .NET / Mono generated files
+.mono/
+mono_crash.*.json
+
+# .NET build artifacts
+bin/
+obj/
+
+# IDE/editor folders
+.vs/
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
