@@ -1,15 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://bs2c8aaftclwu"]
+[gd_scene load_steps=7 format=3 uid="uid://bs2c8aaftclwu"]
 
-[ext_resource type="Script" path="res://demo.gd" id="1_cbjxw"]
-[ext_resource type="Texture2D" uid="uid://qv7qneotub2t" path="res://assets/bt_panel.svg" id="1_hp567"]
-[ext_resource type="Texture2D" uid="uid://ddbnn6n8ggkyg" path="res://assets/bt_pause.svg" id="2_1rclq"]
-[ext_resource type="Texture2D" uid="uid://b71jtyxrrev26" path="res://assets/bt_restart.svg" id="3_t6av5"]
-[ext_resource type="Texture2D" uid="uid://cyhn13d8c36o4" path="res://assets/bt_screenshot.svg" id="4_rrr1c"]
+[ext_resource type="Script" uid="uid://ddm4c130u11w0" path="res://Demo.cs" id="1_cbjxw"]
+[ext_resource type="Texture2D" uid="uid://c8n08mi2dp3yb" path="res://assets/bt_panel.svg" id="1_hp567"]
+[ext_resource type="Texture2D" uid="uid://depy737b07v1i" path="res://assets/bt_pause.svg" id="2_1rclq"]
+[ext_resource type="Script" uid="uid://yvik5fxhlv8t" path="res://sketch/Gametest.cs" id="2_kem5a"]
+[ext_resource type="Texture2D" uid="uid://6fp0prxn37er" path="res://assets/bt_restart.svg" id="3_t6av5"]
+[ext_resource type="Texture2D" uid="uid://dxg27jeikrcmu" path="res://assets/bt_screenshot.svg" id="4_rrr1c"]
 
 [node name="P5" type="SubViewportContainer"]
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_cbjxw")
+Sketch = ExtResource("2_kem5a")
 
 [node name="SketchViewport" type="SubViewport" parent="."]
 unique_name_in_owner = true
@@ -131,7 +133,7 @@ vertical_alignment = 1
 
 [node name="FileDialog" type="FileDialog" parent="."]
 unique_name_in_owner = true
-size = Vector2i(312, 157)
+size = Vector2i(348, 166)
 access = 2
 filters = PackedStringArray("*.png")
 
